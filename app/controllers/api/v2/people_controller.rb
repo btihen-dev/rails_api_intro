@@ -1,4 +1,3 @@
-# returns nested jobs and companies for each person.
 module Api
   module V2
     class PeopleController < JsonController
@@ -6,7 +5,7 @@ module Api
 
       # GET /people
       def index
-        @people = Person.all
+        @people = person_query.all
 
         render_json_person(@people)
       end
@@ -45,6 +44,22 @@ module Api
 
       private
 
+      def person_query
+        Person.includes(person_jobs: [ job: :company ])
+      end
+
+      # Use callbacks to share common setup or constraints between actions.
+      def set_person
+        @person = person_query.where(id: params[:id])
+                              .limit(1).first
+      end
+
+      # Only allow a list of trusted parameters through.
+      def person_params
+        params.require(:person)
+              .permit(:first_name, :last_name, :nick_name, :given_name, :gender)
+      end
+
       def render_json_person(ar_query, options = {})
         render json: ar_query.as_json(
           include: {
@@ -62,17 +77,6 @@ module Api
           },
           except: [ :updated_at, :created_at ]
         ), **options
-      end
-
-      # Use callbacks to share common setup or constraints between actions.
-      def set_person
-        @person = Person.find(params[:id])
-      end
-
-      # Only allow a list of trusted parameters through.
-      def person_params
-        params.require(:person)
-              .permit(:first_name, :last_name, :nick_name, :given_name, :gender)
       end
     end
   end
