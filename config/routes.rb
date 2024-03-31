@@ -10,6 +10,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :people
     end
+    namespace :v2 do
+      resources :people
+    end
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
