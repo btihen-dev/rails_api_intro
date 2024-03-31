@@ -4,13 +4,20 @@ Rails.application.routes.draw do
   resources :people
 
   namespace :api do
+    # returns only people with all attributes
     namespace :v0 do
       resources :people
     end
+    # returns only people with selected attributes
     namespace :v1 do
       resources :people
     end
+    # returns nested objects (jobs and companies)
     namespace :v2 do
+      resources :people
+    end
+    # add ruby calculated values with neste objects
+    namespace :v3 do
       resources :people
     end
   end

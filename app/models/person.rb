@@ -12,4 +12,7 @@ class Person < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :gender, inclusion: { in: %w[male female non-binary] }
+
+  def full_name = "#{first_name} #{last_name}"
+  def usual_name = "#{nick_name || first_name} #{last_name}"
 end
